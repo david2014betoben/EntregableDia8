@@ -19,9 +19,50 @@ console.log("==================================");*/
 
 // 🚫 No eliminar las líneas de abajo ⬇️
 
+//ENTREGABLE DIA 8
 
-let Tareas : string[] = [];
-let focus= true;
+interface Task{
+    id : number;
+    title: string;
+    completed: boolean;
+};
+
+const agregarTarea = (titulo : string) => {
+    const nuevaTarea: Task = {
+        id : id,
+        title : titulo,
+        completed : false
+    };
+    Tareas.push(nuevaTarea);
+    id++;
+};
+
+const listaTareas = () => {
+    console.log("===========Tareas=============");
+ for (let j = 0; j < Tareas.length; j++) {
+               if (Tareas[j].completed) {
+                 console.log(`[${Tareas[j].id}] - ${Tareas[j].title} - Completado`);
+                } else {
+                 console.log(`[${Tareas[j].id}] - ${Tareas[j].title} - Pendiente`);
+                }
+               }
+};
+
+const eliminar = () => {
+    const eliminada = Tareas.pop();
+
+    if (eliminada) {
+        console.log(`
+            La tarea "${eliminada.title}" fue eliminada exitosamente`);
+    } else {
+        console.log(`
+            No hay tareas para eliminar.`);
+    }
+};
+
+let Tareas : Task [] = [];
+let focus: boolean = true;
+let id : number = 1;
 while (focus) {
     console.log(" ");
     console.log(">>>>>>> Menu <<<<<<<<");
@@ -35,19 +76,14 @@ while (focus) {
     if (opcion === "1") {
         console.log(" ");
         let titulo = await rl.question("Ingresa el título de la tarea: ");
-        Tareas.push(titulo);
+        agregarTarea(titulo);
         console.log("la tarea se agrego exitosamente :D");
     } 
     else if (opcion === "2") {
-        let eliminada = Tareas.pop();
-        console.log(" ");
-        console.log(`La tarea "${eliminada}" fue eliminada exitosamente`);
+        eliminar();
         } 
         else if (opcion === "3") {
-               console.log("===========Tareas=============");
-               for (let j = 0; j < Tareas.length; j++) {
-               console.log(`${j + 1}. ${Tareas[j]}`);
-               }
+               listaTareas();
             } 
             else if (opcion === "4") {
                     console.log("╔══════════════════════════════╗");
@@ -60,4 +96,6 @@ while (focus) {
                     console.log("Escoge una opcion valida.");
                 }
 }
+
+
 rl.close();
