@@ -40,10 +40,11 @@ const agregarTarea = (titulo : string) => {
 const listaTareas = () => {
     console.log("===========Tareas=============");
  for (let j = 0; j < Tareas.length; j++) {
-               if (Tareas[j].completed) {
-                 console.log(`[${Tareas[j].id}] - ${Tareas[j].title} - Completado`);
+    const {id, title, completed} = Tareas[j];
+               if (completed) {
+                 console.log(`[${id}] - ${title} - Completado`);
                 } else {
-                 console.log(`[${Tareas[j].id}] - ${Tareas[j].title} - Pendiente`);
+                 console.log(`[${id}] - ${title} - Pendiente`);
                 }
                }
 };
@@ -60,6 +61,8 @@ const eliminar = () => {
     }
 };
 
+
+
 let Tareas : Task [] = [];
 let focus: boolean = true;
 let id : number = 1;
@@ -68,8 +71,11 @@ while (focus) {
     console.log(">>>>>>> Menu <<<<<<<<");
     console.log("1. Agregar Tarea");
     console.log("2. Eliminar última tarea");
-    console.log("3. Listar tareas");
-    console.log("4. Salir");
+    console.log("3. Lista de todas las tareas");
+    console.log("4. Marcar tarea completada");
+    console.log("5. Lista de tareas pendientes");
+    console.log("6. Lista de tareas completadas");
+    console.log("7. Salir");
 
     let opcion = await rl.question("Por favor escoge alguna opcion: ");
     
@@ -84,18 +90,50 @@ while (focus) {
         } 
         else if (opcion === "3") {
                listaTareas();
-            } 
+            }
             else if (opcion === "4") {
+                let idSelect : number = Number ( await rl.question("Ingresa el id de la tarea: "));
+                const marcarCompletado : Task | undefined = Tareas.find(function(tarea : Task,): boolean {
+                return tarea.id === idSelect;
+                });
+                if (marcarCompletado) {
+                    marcarCompletado.completed = true;
+                    console.log(`La tarea "${marcarCompletado.title}" fue completada.`);
+                } else {
+                    console.log("No se encontró una tarea con ese ID.");
+                }
+            }else if (opcion === "5") {
+                console.log("=========Tareas pendientes==========")
+                const tareasPendientes : Task[] = Tareas.filter (function(tareas : Task,) : boolean {
+                    return !tareas.completed;
+                });
+                for (let f = 0; f < tareasPendientes.length; f++) {
+                    const {id, title, completed} = tareasPendientes[f];
+                    console.log(`[${id}] - ${title} - Pendiente`);
+                }
+                }else if (opcion === "6") {
+                console.log("=========Tareas Completadas==========")
+                const tareasCompletadas : Task[] = Tareas.filter (function(tareas : Task,) : boolean {
+                    return tareas.completed;
+                });
+                for (let h = 0; h < tareasCompletadas.length; h++) {
+                    const {id, title, completed} = tareasCompletadas[h];
+                    console.log(`[${id}] - ${title} - Completado`);
+                }
+                }
+                  else if (opcion === "7") {
                     console.log("╔══════════════════════════════╗");
                     console.log("║       ¡HASTA PRONTO!         ║");
                     console.log("║   Gracias por usar mi app    ║");
                     console.log("╚══════════════════════════════╝");
                     focus = false;
-                } 
+                  } 
                 else {
                     console.log("Escoge una opcion valida.");
-                }
+                  }
 }
+
+
 
 
 rl.close();
